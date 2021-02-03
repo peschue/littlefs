@@ -1,0 +1,55 @@
+[[case]] # rewrite small file
+code = '''
+    lfs_format(&lfs, &cfg) => 0;
+    lfs_mount(&lfs, &cfg) => 0;
+
+    // initial open/create
+    lfs_file_open(&lfs, &file, "NEXTID",
+            LFS_O_RDWR | LFS_O_CREAT) => 0;
+    lfs_file_size(&lfs, &file) => 0;
+    lfs_file_seek(&lfs, &file, 0, LFS_SEEK_SET) => 0;
+
+    uint64_t ui;
+    lfs_file_read(&lfs, &file, &ui, 8) => 0;
+
+    // write/rewrite file
+    ui = 0;
+
+    //lfs_file_truncate(&lfs, &file, 0) => 0;
+    lfs_file_rewind(&lfs, &file) => 0;
+    lfs_file_write(&lfs, &file, &ui, 8) => 8;
+
+    //lfs_file_truncate(&lfs, &file, 8) => 0;
+    
+    lfs_file_close(&lfs, &file) => 0;
+
+    //lfs_unmount(&lfs) => 0;
+
+    // now do the same many times but expect data in file
+    for(int i = 0; i < 100; ++i) {
+
+        //lfs_mount(&lfs, &cfg) => 0;
+
+        lfs_file_open(&lfs, &file, "NEXTID",
+                LFS_O_RDWR | LFS_O_CREAT) => 0;
+        lfs_file_size(&lfs, &file) => 8;
+        lfs_file_seek(&lfs, &file, 0, LFS_SEEK_SET) => 0;
+
+        lfs_file_read(&lfs, &file, &ui, 8) => 8;
+
+        ui ++;
+
+        // write/rewrite file
+   
+        //lfs_file_truncate(&lfs, &file, 0) => 0;
+        lfs_file_rewind(&lfs, &file) => 0;
+        lfs_file_write(&lfs, &file, &ui, 8) => 8;
+
+        //lfs_file_truncate(&lfs, &file, 8) => 0;
+        
+        lfs_file_close(&lfs, &file) => 0;
+
+        lfs_unmount(&lfs) => 0;
+    }
+    
+'''

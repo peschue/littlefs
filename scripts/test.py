@@ -74,13 +74,13 @@ extern const char *lfs_testbd_path;
 extern uint32_t lfs_testbd_cycles;
 """
 DEFINES = {
-    'LFS_READ_SIZE': 16,
-    'LFS_PROG_SIZE': 'LFS_READ_SIZE',
-    'LFS_BLOCK_SIZE': 512,
-    'LFS_BLOCK_COUNT': 1024,
-    'LFS_BLOCK_CYCLES': -1,
-    'LFS_CACHE_SIZE': '(64 % LFS_PROG_SIZE == 0 ? 64 : LFS_PROG_SIZE)',
-    'LFS_LOOKAHEAD_SIZE': 16,
+    'LFS_READ_SIZE': 8,
+    'LFS_PROG_SIZE': 8,
+    'LFS_BLOCK_SIZE': 4096,
+    'LFS_BLOCK_COUNT': 8176,
+    'LFS_BLOCK_CYCLES': 500,
+    'LFS_CACHE_SIZE': 256,
+    'LFS_LOOKAHEAD_SIZE': 8,
     'LFS_ERASE_VALUE': 0xff,
     'LFS_ERASE_CYCLES': 0,
     'LFS_BADBLOCK_BEHAVIOR': 'LFS_TESTBD_BADBLOCK_PROGERROR',
@@ -110,6 +110,10 @@ PROLOGUE = """
         .block_cycles   = LFS_BLOCK_CYCLES,
         .cache_size     = LFS_CACHE_SIZE,
         .lookahead_size = LFS_LOOKAHEAD_SIZE,
+        //.read_buffer = malloc(LFS_CACHE_SIZE),
+        //.prog_buffer = malloc(LFS_CACHE_SIZE),
+        //.lookahead_buffer = malloc(LFS_LOOKAHEAD_SIZE),
+        //.name_max = 32,
     };
 
     __attribute__((unused)) const struct lfs_testbd_config bdcfg = {
