@@ -49,7 +49,7 @@ code = '''
         
         lfs_file_close(&lfs, &file) => 0;
 
-        lfs_unmount(&lfs) => 0;
+        //lfs_unmount(&lfs) => 0;
     }
     
 '''
